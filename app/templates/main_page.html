@@ -2,4 +2,17 @@
 
 {% block content %}
 
+{%for post in all_posts%}
+<div>
+
+
+    <p>{{post.pub_date.strftime('%Y-%m-%d')}}</p>
+    <h2>{{post.title}}</h2>
+    <p>
+        {{post.post_content}}
+    </p>
+</div>
+{% endfor %}
 {% endblock %}
+
+
