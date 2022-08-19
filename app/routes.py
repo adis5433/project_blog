@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash
 from app import app
 from app.models import Post, db
 from app import forms
@@ -15,22 +15,29 @@ def homepage():
     return render_template("main_page.html", all_posts=all_posts)
 
 
-@app.route("/post/", methods=["GET","POST"])
-def add_post():
-    form = forms.PostForm()
+
+@app.route("/edit-post/<post_id>", methods = ["GET", "POST"])
+def edit_and_add_post(post_id):
+    post = Post.query.filter_by(id=post_id).first()
+    form = forms.PostForm(obj=post)
     errors = None
     if request.method == "POST":
         if form.validate_on_submit():
-            new_post = Post(
-                form.title.data,
-                form.post_content.data,
-                is_public=form.is_public.data
-            )
-            db.session.add(new_post)
+            if post_id == 'new_id':
+                new_post = Post(
+                    title=form.title.data,
+                    post_content=form.post_content.data,
+                    is_public=form.is_public.data
+                )
+                db.session.add(new_post)
+                flash(f"Wpis o tytule {form.title.data} został opublikowany")
+            elif post_id == str(post.id):
+                print("final up")
+                form.populate_obj(post)
+                db.session.commit()
+                flash(f"Wpis o tytule {form.title.data} został zmodyfikowany")
             db.session.commit()
         else:
             errors = form.errors
     return render_template("post_form.html", form=form, errors=errors)
-
-
 
