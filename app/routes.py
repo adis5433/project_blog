@@ -85,7 +85,7 @@ def list_drafts():
 @app.route("/delete-post/<post_id>", methods = [ "POST"])
 def delete_post(post_id):
     post = Post.query.filter_by(id=post_id)
-    post.delete()
+    flash(f"Post: {post.first().title} został usunięty.", 'delete')
     db.session.commit()
     return redirect(url_for('homepage'))
 

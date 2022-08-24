@@ -43,16 +43,13 @@
                  </form>
             {% endif %}
         </nav>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-info mt-3" role="alert">
-            {{ message }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-        {% endfor %}
+        {% with message = get_flashed_messages() %}
+        {% if message %}
+                <a href="/">
+                    <div class="alert alert-primary" role="alert">
+                        {{message}}
+                    </div>
+                </a>
         {% endif %}
         {% endwith %}
         <!-- Page content-->
